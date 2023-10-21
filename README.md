@@ -11,8 +11,12 @@ This is Altschool second semester Examination Project
 - Execute the bash script on the Slave node and verify that the PHP application is accessible through the VM's IP address (take screenshot of this as evidence)
 - Create a cron job to check the server's uptime every 12 am.
 
+## Project Overview
+The project is designed to test the concept of **bash scripting**, **vagrantfile** configuration and **ansible playbook** setup. It is meant to prepare fully for Cloud Engineering journey. I used Oracle VM virtuabox in deploying solution to the project given.
+Vagrantfile was used to provision two virtual machines which are **master** and **slave**. The provisioning include setting up of dhcp network with port forwarding, assigning of ip and configuration of the vms to meet the needed requirement for the project.
+
 # Solution
-Configure vagrantfile to deploy two VMs as shown below in a sample file:
+Vagrantfile was configured by putting specification as needed including bash script and ansible playbook. Each of the files in vagrantfile and details of vagrantfile can be seen as displayed in the paragraphs below:
 
 ## Vagrantfile
 
@@ -44,6 +48,8 @@ Vagrant.configure("2") do |config|
       end
     end
   end
+
+To execute vagrantfile, the command **vagrant up** was used on the command line in the directory where vagrant was installed. Installation of vagrant on the control machine is a prerequisite for the use of vagrant file. In the case of this project, vagrant was installed on my local machine running windows 10.
 
 ## Ansible Playbook (lampstack_new.yml)
 
@@ -162,6 +168,21 @@ sudo systemctl enable mysql
 ##### Start Apache and MySQL services
 sudo systemctl start apache2
 sudo systemctl start mysql
+
+## Resources:
+
+Below are some of the resources used:
+
+<https://medium.com/@melihovv/zero-time-deploy-of-laravel-project-with-ansible-3235816676bb>
+
+<https://www.cherryservers.com/blog/how-to-install-and-setup-postgresql-server-on-ubuntu-20-04>
+
+<https://dev.to/sureshramani/how-to-deploy-laravel-project-with-apache-on-ubuntu-36p3>
+
+<https://docs.ansible.com/>
+
+
+
 
 
       
