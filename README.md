@@ -13,7 +13,10 @@ This is Altschool second semester Examination Project
 
 ## Project Overview
 The project is designed to test the concept of **bash scripting**, **vagrantfile** configuration and **ansible playbook** setup. It is meant to prepare fully for Cloud Engineering journey. I used Oracle VM virtuabox in deploying solution to the project given.
+
 Vagrantfile was used to provision two virtual machines which are **master** and **slave**. The provisioning include setting up of dhcp network with port forwarding, assigning of ip and configuration of the vms to meet the needed requirement for the project.
+
+A bash script (system-uptime-script_new.sh) was written to check the uptime of the servers and keep a report of it on the server. There is an error handling section in the script that enters any error encountered into error log for proper attention. This script reads server ip from a text file (servers.txt)to know the servers to check up.
 
 # Solution
 Vagrantfile was configured by putting specification as needed including bash script and ansible playbook. Each of the files in vagrantfile and details of vagrantfile can be seen as displayed in the paragraphs below:
@@ -136,8 +139,12 @@ Likewise, ansible as a tool for the project was also installed on the master so 
         name: mysql-server
         state: restarted
 
-## Bash Scripts 
+## Bash Scripts list
 
+- provision_master.sh
+- provision_slave.sh
+- system-uptime-script_new.sh
+  
 ### provision_master.sh
 
 #!/bin/bash
@@ -170,6 +177,91 @@ sudo systemctl enable mysql
 ##### Start Apache and MySQL services
 sudo systemctl start apache2
 sudo systemctl start mysql
+
+### Server uptime Script - system-uptime-script_new.sh
+
+#!/bin/bash
+
+log_file="/tmp/uptime-report.log"
+
+uptime_file="/tmp/uptime-report.out"
+
+error_file="/tmp/uptime-report-errors.log"
+
+##### Function to log messages with timestamps
+
+log() {
+
+    echo "$(date +'%Y-%m-%d %H:%M:%S') - $1" >> "$log_file"
+    
+}
+
+log "Starting server uptime check..."
+
+##### Read server hostnames or IP addresses from /tmp/servers.txt
+
+upserver=$(for server in $(cat /tmp/servers.txt)
+
+do
+
+    # Use ssh to check the uptime of the server
+    
+    if ssh "$server" 'uptime' &> /dev/null; then
+    
+        uptime_output=$(ssh "$server" 'uptime')
+        
+        echo -n "$(date +'%Y-%m-%d %H:%M:%S') - $server: " >> "$uptime_file"
+        
+        echo "$uptime_output" | awk '{print $3,$4}' | sed 's/,//' >> "$uptime_file"
+        
+    else
+    
+        log "Failed to get uptime for $server."
+        
+        echo "$(date +'%Y-%m-%d %H:%M:%S') - Failed to get uptime for $server." >> "$error_file"
+        
+    fi
+    
+done)
+
+##### Check if any errors occurred
+
+if [ -s "$error_file" ]; then
+
+    log "Errors occurred during uptime checks. See $error_file for details."
+    
+else
+
+    log "Server uptime check completed successfully."
+    
+fi
+
+##### Display the uptime report
+
+if [ -s "$uptime_file" ]; then
+
+    column -t < "$uptime_file"
+    
+else
+
+    log "No servers were reachable or provided uptime information."
+    
+fi
+
+## Sql Script
+
+CREATE TABLE IF NOT EXISTS schoolReg2 (
+
+  message varchar(255) NOT NULL
+  
+  ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  
+  INSERT INTO schoolReg2(message) VALUES('You are welcome');
+  
+  INSERT INTO schoolReg2(message) VALUES('This is good');
+  
+  INSERT INTO schoolReg2(message) VALUES('Fun all the way')
+
 
 ## Pictorial Proofs of the Project
 Find below schrenshots of **vagrant up**, **ssh vagrant@192.168.56.25**, **ansible-playbook lampstack_new.yml** during testing and **apache** page which I edited to include my name in the source file.
