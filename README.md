@@ -49,7 +49,9 @@ Vagrant.configure("2") do |config|
     end
   end
 
-To execute vagrantfile, the command **vagrant up** was used on the command line in the directory where vagrant was installed. Installation of vagrant on the control machine is a prerequisite for the use of vagrant file. In the case of this project, vagrant was installed on my local machine running windows 10.
+To execute vagrantfile, the command **vagrant up** was used on the command line in the directory where vagrant was installed. Installation of vagrant on the control machine is a prerequisite for the use of vagrant file. In the case of this project, vagrant was installed on my local machine running windows 10. Details of how to install vagrant can be obtained [here](https://developer.hashicorp.com/vagrant).
+
+Likewise, ansible as a tool for the project was also installed on the master so as to effect proper automates provisioning, configuration management, application deployment and orchestration of slave through master. Details of ansible documentation is available [here](https://www.ansible.com). Ansible playbook used for this project is displayed below:
 
 ## Ansible Playbook (lampstack_new.yml)
 
@@ -168,6 +170,29 @@ sudo systemctl enable mysql
 ##### Start Apache and MySQL services
 sudo systemctl start apache2
 sudo systemctl start mysql
+
+## Pictorial Proofs of the Project
+Find below schrenshots of **vagrant up**, **ssh vagrant@192.168.56.25**, **ansible-playbook lampstack_new.yml** during testing and **apache** page which I edited to include my name in the source file.
+
+#### vagrant up and vagrant ssh master
+
+<img width="960" alt="master_vm_details" src="https://github.com/jidejj/AltSchool_LAMP_Deployment_Project/assets/9843012/fc22e236-1d20-41c0-9742-4dbd095019e2">
+
+#### ssh vagrant@192.168.56.25
+
+<img width="960" alt="slave_vm_details" src="https://github.com/jidejj/AltSchool_LAMP_Deployment_Project/assets/9843012/07795b13-5a3d-4690-8b85-f809538793ad">
+
+#### playbook execution - lampstack_new.yml
+
+<img width="960" alt="screenshot2" src="https://github.com/jidejj/AltSchool_LAMP_Deployment_Project/assets/9843012/1db4ac79-b2fa-4ec3-8c0d-85df36a7fb82">
+
+<img width="960" alt="screenshot3" src="https://github.com/jidejj/AltSchool_LAMP_Deployment_Project/assets/9843012/a231305d-d661-420f-8314-61510fd318bb">
+
+#### Apache Default Page 
+
+<img width="960" alt="screenshot1" src="https://github.com/jidejj/AltSchool_LAMP_Deployment_Project/assets/9843012/a47818fd-fa9b-4bdd-b4e8-4ace4640087f">
+
+
 
 ## Resources:
 
