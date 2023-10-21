@@ -16,7 +16,7 @@ The project is designed to test the concept of **bash scripting**, **vagrantfile
 
 Vagrantfile was used to provision two virtual machines which are **master** and **slave**. The provisioning include setting up of dhcp network with port forwarding, assigning of ip and configuration of the vms to meet the needed requirement for the project.
 
-A bash script (system-uptime-script_new.sh) was written to check the uptime of the servers and keep a report of it on the server. There is an error handling section in the script that enters any error encountered into error log for proper attention. This script reads server ip from a text file (servers.txt)to know the servers to check up.
+A bash script (system-uptime-script_new.sh) was written to check the uptime of the servers and keep a report of it on the server. There is an error handling section in the script that enters any error encountered into error log for proper attention. This script reads server ip from a text file (servers.txt)to know the servers to check up. The script has been scheduled in crontab to be running every 12.00am and write to different logs.
 
 # Solution
 Vagrantfile was configured by putting specification as needed including bash script and ansible playbook. Each of the files in vagrantfile and details of vagrantfile can be seen as displayed in the paragraphs below:
@@ -248,7 +248,7 @@ else
     
 fi
 
-## Sql Script
+## Sql Script - To create schoolReg2 table and insert values
 
 CREATE TABLE IF NOT EXISTS schoolReg2 (
 
@@ -274,7 +274,7 @@ Find below schrenshots of **vagrant up**, **ssh vagrant@192.168.56.25**, **ansib
 
 <img width="960" alt="slave_vm_details" src="https://github.com/jidejj/AltSchool_LAMP_Deployment_Project/assets/9843012/07795b13-5a3d-4690-8b85-f809538793ad">
 
-#### playbook execution - lampstack_new.yml
+#### playbook execution - (ansible-playbook lampstack_new.yml)
 
 <img width="960" alt="screenshot2" src="https://github.com/jidejj/AltSchool_LAMP_Deployment_Project/assets/9843012/1db4ac79-b2fa-4ec3-8c0d-85df36a7fb82">
 
@@ -284,6 +284,17 @@ Find below schrenshots of **vagrant up**, **ssh vagrant@192.168.56.25**, **ansib
 
 <img width="960" alt="screenshot1" src="https://github.com/jidejj/AltSchool_LAMP_Deployment_Project/assets/9843012/a47818fd-fa9b-4bdd-b4e8-4ace4640087f">
 
+#### Servers uptime logs (bash system-uptime-script_new.sh)
+
+<img width="960" alt="servers_uptime_logs" src="https://github.com/jidejj/AltSchool_LAMP_Deployment_Project/assets/9843012/f462dbb1-7f67-47f6-b284-88e6e5418a2e">
+
+#### crontab scheduling
+
+<img width="960" alt="Cron Scheduling" src="https://github.com/jidejj/AltSchool_LAMP_Deployment_Project/assets/9843012/9df9af82-dc28-4776-8d01-7339889709d8">
+
+#### Slave Database Connection and Extraction from schoolReg2 table of altschooldb
+
+<img width="960" alt="Database Connection" src="https://github.com/jidejj/AltSchool_LAMP_Deployment_Project/assets/9843012/b10df0e2-e0f7-4e63-86f0-ced6da28c3a2">
 
 
 ## Resources:
