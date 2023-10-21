@@ -1,0 +1,31 @@
+# Vagrantfile
+
+Vagrant.configure("2") do |config|
+    # Master VM
+    config.vm.define "master" do |master|
+      master.vm.box = "ubuntu/focal64"
+    config.vm.provider :libvirt do |libvirt|
+       libvirt.driver = "qemu"
+      master.vm.hostname = 'master'
+      master.vm.network "private_network", type: "dhcp"
+      end
+      master.vm.provision "shell", path: "provision_master.sh"
+      master.vm.provision "ansible" do |ansible|
+        ansible.playbook = "lampstack_new.yml"
+      end
+    end
+  
+    # Slave VM
+    config.vm.define "slave" do |slave|
+      slave.vm.box = "ubuntu/focal64"
+    config.vm.provider :libvirt do |libvirt|
+       libvirt.driver = "qemu"
+      slave.vm.hostname = 'slave'
+      slave.vm.network "private_network", type: "dhcp"
+      end
+    slave.vm.provision "shell", path: "provision_slave.sh"
+    slave.vm.provision "ansible" do |ansible|
+      ansible.playbook = "lampstack_new.yml"
+      end
+    end
+  end

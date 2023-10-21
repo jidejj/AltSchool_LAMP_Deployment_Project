@@ -1,0 +1,80 @@
+---
+- name: install apache php and mysql
+  hosts: 192.168.56.25
+  become: true
+  become_user: root
+  gather_facts: true
+
+  tasks:
+     - name: Copy the script to the slave
+       copy:
+        src: /home/vagrant/provision_slave.sh  
+        dest: /home/vagrant/provision_slave.sh 
+        mode: 0755  
+       become_user: vagrant
+
+     - name: Execute the script on the slave
+       shell: /home/vagrant/provision_slave.sh
+       become_user: vagrant 
+
+     - name: "install apache2"
+       package: name=apache2 state=present
+
+     - name: "install apache2 php5"
+       package: name=libapache2-mod-php state=present
+
+     - name: "install php-cli"
+       package: name=php-cli state=present
+
+     - name: "install php-gd"
+       package: name=php-gd state=present
+
+     - name: "install php-mysql"
+       package: name=php-mysql state=present
+
+     - name: "install mysqlserver"
+       package: name=mysql-server state=present
+
+     - name: Install MySQL
+       apt:
+        name: mysql-server
+        state: present
+
+     - name: Copy custom MySQL configuration
+       copy:
+         src: /home/vagrant/.my.cnf
+         dest: /etc/mysql/.my.cnf
+       notify: Restart PyMySQL
+
+     - name: Ensure MySQL is started and enabled
+       service:
+         name: mysql
+         state: started
+         enabled: yes
+
+     - name: Create a MySQL database
+       mysql_db:
+         name: altschooldb
+         state: present
+       become_method: sudo
+       become_user: altschool
+       become: yes
+
+     - name: Create a MySQL table
+       mysql_db:
+         name: altschooldb
+         state: import
+         target: /home/vagrant/dump.sql
+       become_user: altschool
+       become: yes
+
+     - name: Create a MySQL user
+       mysql_user:
+         name: altschool
+         password: altschool
+
+  handlers:
+    - name: Restart PyMySQL
+      service:
+        name: mysql-server
+        state: restarted
